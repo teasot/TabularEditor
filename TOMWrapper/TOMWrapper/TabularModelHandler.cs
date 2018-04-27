@@ -270,7 +270,11 @@ namespace TabularEditor.TOMWrapper
                 SourceType = ModelSourceType.File;
                 Source = path;
             }
-            database = TOM.JsonSerializer.DeserializeDatabase(data);
+            if(data.TrimStart(new char[] { ' ', '\t', '\r', '\n' }).StartsWith("<"))
+                database = TOM2AMO.ToTOM.Database(TOM2AMO.File.AMOFile.ReadFromFile(path), true);
+            else
+                database = TOM.JsonSerializer.DeserializeDatabase(data);
+
             CompatibilityLevel = database.CompatibilityLevel;
 
             Status = "File loaded succesfully.";
